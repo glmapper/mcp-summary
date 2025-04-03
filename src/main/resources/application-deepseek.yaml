@@ -1,0 +1,9 @@
+spring:
+  ai:
+    openai:
+      api-key: sk-7ca472e997e449fe9e57e27c52526705
+      chat:
+        base-url: https://api.deepseek.com
+        completions-path: /v1/chat/completions
+        options:
+          model: deepseek-chat
