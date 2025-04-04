@@ -1,20 +1,15 @@
 server:
   port: 8060
-
-#spring.ai.openai.api-key=sk-7ca472e997e449fe9e57e27c52526705
-#spring.ai.openai.chat.base-url=https://api.deepseek.com
-#spring.ai.openai.chat.completions-path=/v1/chat/completions
-#spring.ai.openai.chat.options.model=deepseek-chat
 spring:
   application:
-    name: mcp-sample
+    name: mcp-summary
   profiles:
     active: doubao
   ai:
     mcp:
       server:
         enabled: true
-        name: mcp-sample
+        name: mcp-summary
         version: 1.0.0
         authentication:
           enabled: true
