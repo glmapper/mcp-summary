@@ -27,3 +27,6 @@ spring:
           initial-interval: 1000
           multiplier: 2.0
           max-interval: 10000
+milvus:
+  host: localhost
+  port: 19530 

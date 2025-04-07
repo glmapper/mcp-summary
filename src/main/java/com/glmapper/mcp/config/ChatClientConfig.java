@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * @Classname ChatClientConfig
- * @Description TODO
+ * @Description ChatClientConfig
  * @Date 2025/4/2 17:09
  * @Created by glmapper
  */
@@ -23,6 +23,8 @@ public class ChatClientConfig {
      */
     @Bean
     public ChatClient chatClient(ChatClient.Builder builder) {
+
+        //return builder.build();
         return builder
                 .defaultSystem("你是一个图书管理助手，可以帮助用户查询图书信息。" +
                         "你可以根据书名模糊查询、根据作者查询和根据分类查询图书。" +
