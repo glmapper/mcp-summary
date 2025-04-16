@@ -1,6 +1,6 @@
 # MCP Summary Project
 
-这是一个基于 Spring Boot 3 和 JDK 21 的 Model Context Protocol (MCP) 项目。该项目旨在提供一个统一的模型上下文协议实现，支持多种模型服务的集成和管理。项目包含客户端SDK和服务端实现，并以天气服务作为示例展示如何使用MCP协议。
+这是一个基于 Spring Boot 3 和 JDK 21 的 Model Context Protocol (MCP) 项目。该项目旨在提供一个统一的模型上下文协议实现，支持多种模型服务的集成和管理。项目包含客户端SDK和服务端实现，并以天气服务、本地文件系统以及mysql 数据库作为示例展示如何使用MCP协议。
 
 This is a Model Context Protocol (MCP) project based on Spring Boot 3 and JDK 21. The project aims to provide a unified model context protocol implementation, supporting integration and management of various model services. It includes both client SDK and server implementation, with a weather service as an example to demonstrate how to use the MCP protocol.
 
@@ -13,25 +13,17 @@ This is a Model Context Protocol (MCP) project based on Spring Boot 3 and JDK 21
 - 完整的客户端SDK / Complete Client SDK
 - 丰富的示例实现 / Rich Example Implementations
 
-### 应用场景 / Use Cases
-- 模型服务集成 / Model Service Integration
-- 天气服务实现 / Weather Service Implementation
-- AI模型调用 / AI Model Invocation
-- 分布式服务集成 / Distributed Service Integration
 
 ## 项目模块 / Project Modules
 
 ### mcp-clients
 - MCP 协议客户端实现 / MCP Protocol Client Implementation
-- 支持多种调用方式 / Multiple Invocation Methods Support
-- 内置连接池管理 / Built-in Connection Pool Management
-- 完整的异常处理 / Complete Exception Handling
+- 基于 openai 协议的模型调用 / Model Invocation Based on OpenAI Protocol
+- 支持多种 mcp server / Support for Multiple MCP Servers
 
 ### mcp-server-weather
 - 天气服务示例实现 / Weather Service Example Implementation
 - 完整的 MCP 协议实现 / Complete MCP Protocol Implementation
-- RESTful API 接口 / RESTful API Endpoints
-- 可扩展的服务设计 / Extensible Service Design
 
 ## 技术栈 / Tech Stack
 
@@ -69,22 +61,14 @@ This is a Model Context Protocol (MCP) project based on Spring Boot 3 and JDK 21
 
 ## 快速开始 / Quick Start
 
-### 1. 环境准备 / Environment Setup
-```bash
-# 检查 Java 版本 / Check Java version
-java -version  # 确保是 JDK 21+ / Ensure it's JDK 21+
+### 1. 克隆项目 / Clone the Project
 
-# 检查 Maven 版本 / Check Maven version
-mvn -version   # 确保是 3.6+ / Ensure it's 3.6+
-```
-
-### 2. 获取代码 / Get the Code
 ```bash
-git clone https://github.com/your-username/mcp-summary.git
+git clone https://github.com/glmapper/mcp-summary.git
 cd mcp-summary
 ```
 
-### 3. 构建项目 / Build the Project
+### 2. 构建项目 / Build the Project
 ```bash
 # 清理并安装所有模块 / Clean and install all modules
 mvn clean install -DskipTests
@@ -93,16 +77,16 @@ mvn clean install -DskipTests
 mvn clean install
 ```
 
-### 4. 运行服务 / Run the Services
+### 3. 运行服务 / Run the Services
 
-#### 启动天气服务器 / Start Weather Server
+#### 3.1 启动天气服务器 / Start Weather Server
 ```bash
 cd mcp-server-weather
 mvn spring-boot:run
 ```
-服务将在 http://localhost:8080 启动 / Service will start at http://localhost:8080
+服务将在 http://localhost:8081 启动 / Service will start at http://localhost:8081；通过 sse 协议推送天气数据。
 
-#### 运行客户端示例 / Run Client Example
+#### 3.2 运行客户端示例 / Run Client Example
 ```bash
 cd mcp-clients
 mvn spring-boot:run
@@ -111,7 +95,11 @@ mvn spring-boot:run
 ### 5. 验证安装 / Verify Installation
 ```bash
 # 测试天气服务是否正常运行 / Test if weather service is running
-curl http://localhost:8080/api/weather/current?city=Beijing
+curl http://localhost:8060/api/chat/ai?userInput="上海的天气如何？"
+# 测试访问数据库，统计表数据量
+curl http://localhost:8060/api/chat/ai?userInput="user 中有多少数据？"
+# 测试本地文件，创建文件并写入文本
+curl http://localhost:8060/api/chat/ai?userInput="请帮我创建一个ai.txt，并在里面写入 hello glmapper"
 ```
 
 ## 配置说明 / Configuration
@@ -141,30 +129,10 @@ The project uses the following Maven repositories, please ensure your settings.x
 </repositories>
 ```
 
+笔者当前使用 spring ai 1.0.0-M7 版本在 maven 仓库中还不存在，是本地编译的。
+
 ### 应用配置 / Application Configuration
-在 `application.yml` 中配置以下属性：
-Configure the following properties in `application.yml`:
-
-```yaml
-spring:
-  application:
-    name: mcp-summary
-  profiles:
-    active: dev
-
-server:
-  port: 8080
-
-# MCP 配置 / MCP Configuration
-mcp:
-  client:
-    pool:
-      max-total: 100
-      max-idle: 20
-  server:
-    weather:
-      api-key: your-api-key
-```
+查阅具体 module 的 application.yml 文件，了解具体的配置项和默认值。
 
 ## 开发指南 / Development Guide
 
@@ -174,40 +142,6 @@ mcp:
 3. 添加服务配置 / Add service configuration
 4. 注册服务到主应用 / Register service to main application
 
-### 客户端调用示例 / Client Usage Example
-```java
-@Autowired
-private McpClient mcpClient;
-
-public void example() {
-    McpRequest request = McpRequest.builder()
-        .modelId("weather-model")
-        .parameters(Map.of("city", "Beijing"))
-        .build();
-    
-    McpResponse response = mcpClient.invoke(request);
-    // 处理响应 / Handle response
-}
-```
-
-## 问题排查 / Troubleshooting
-
-### 常见问题 / Common Issues
-1. 构建失败 / Build Failure
-   - 检查 Maven 设置 / Check Maven settings
-   - 确保网络连接 / Ensure network connectivity
-   
-2. 服务启动失败 / Service Start Failure
-   - 检查端口占用 / Check port occupation
-   - 验证配置文件 / Verify configuration files
-
-### 日志配置 / Logging Configuration
-```xml
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-logging</artifactId>
-</dependency>
-```
 
 ## 贡献指南 / Contributing
 1. Fork 项目 / Fork the project
@@ -219,45 +153,6 @@ public void example() {
 ## 许可证 / License
 [Apache License 2.0](LICENSE)
 
-## 联系我们 / Contact Us
-- Issues: https://github.com/your-username/mcp-summary/issues
-- Email: your-email@example.com
-- 文档 / Documentation: https://your-username.github.io/mcp-summary
-
-## API 接口 / API Endpoints
-
-### 创建上下文 / Create Context
-```bash
-POST http://localhost:8080/api/mcp/context?modelId=test-model&modelVersion=1.0.0
-```
-
-### 验证上下文 / Validate Context
-```bash
-POST http://localhost:8080/api/mcp/context/validate
-Content-Type: application/json
-
-{
-    "modelId": "test-model",
-    "modelVersion": "1.0.0",
-    "contextId": "uuid",
-    "timestamp": 1234567890
-}
-```
-
-### 丰富上下文 / Enrich Context
-```bash
-POST http://localhost:8080/api/mcp/context/enrich?key=environment&value=production
-Content-Type: application/json
-
-{
-    "modelId": "test-model",
-    "modelVersion": "1.0.0",
-    "contextId": "uuid",
-    "timestamp": 1234567890
-}
-```
-
-### 获取上下文 / Get Context
-```bash
-GET http://localhost:8080/api/mcp/context/{contextId}
-``` 
+## 联系我 / Contact Me
+- Issues: https://github.com/glmapper/mcp-summary/issues
+- Email: glmapper_2018@163.com
