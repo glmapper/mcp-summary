@@ -1,7 +1,7 @@
 spring:
   ai:
     openai:
-      api-key: e8bf7336-600b-48f0-b9a7-8e4c4e719982
+      api-key: xxxxxx
       chat:
         base-url: https://ark.cn-beijing.volces.com/api/v3
         completions-path: /chat/completions
