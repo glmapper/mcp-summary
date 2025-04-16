@@ -1,9 +1,0 @@
-spring:
-  ai:
-    openai:
-      api-key: e8bf7336-600b-48f0-b9a7-8e4c4e719982
-      chat:
-        base-url: https://ark.cn-beijing.volces.com/api/v3
-        completions-path: /chat/completions
-        options:
-          model: ep-20250117161524-4knd5

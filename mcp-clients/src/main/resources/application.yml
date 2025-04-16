@@ -1,0 +1,7 @@
+server:
+  port: 8060
+spring:
+  application:
+    name: mcp-client
+  profiles:
+    active: deepseek,mcp-client

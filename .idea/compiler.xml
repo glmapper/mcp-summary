@@ -7,13 +7,16 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="mcp-sample" />
+        <module name="mcp-clients" />
+        <module name="mcp-server-weather" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="mcp-sample" options="-parameters" />
+      <module name="mcp-clients" options="-parameters" />
+      <module name="mcp-server-weather" options="-parameters" />
+      <module name="mcp-summary" options="" />
     </option>
   </component>
 </project>
