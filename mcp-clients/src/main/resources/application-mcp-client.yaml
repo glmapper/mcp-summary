@@ -39,4 +39,8 @@ spring:
                 - "@modelcontextprotocol/server-filesystem"
                 # 在此文件夹内进行文件操作，需根据具体需求调整目标文件夹
                 - "/Users/glmapper/Documents"
+            "fetch": {
+              command: "uvx",
+              args: ["mcp-server-fetch"]
+            }
         type: sync

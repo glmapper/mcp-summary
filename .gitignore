@@ -9,3 +9,8 @@ target/*
 /.vscode/
 /.idea/
 application-local.yaml
+/mcp-clients/target/
+/.idea/
+/.idea/compiler.xml
+/.idea/encodings.xml
+/mcp-server-weather/target/
